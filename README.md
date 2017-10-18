@@ -1,3 +1,2 @@
 # Compressed-sensing
-Compressed sensing recovery methods\n
-Previously studied during my college graduation project
+Compressed sensing recovery methods        Previously studied during my college graduation project
