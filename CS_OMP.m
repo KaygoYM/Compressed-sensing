@@ -1,30 +1,29 @@
 function [ theta ] = CS_OMP( y,A,t )  
-%CS_OMP Summary of this function goes here  
-%Version: 1.0 written by jbb0523 @2015-04-18  
+%CS_OMP Summary of this function goes here 
 %   Detailed explanation goes here  
 %   y = Phi * x  
 %   x = Psi * theta  
 %   y = Phi*Psi * theta  
-%   Áî A = Phi*Psi, Ôòy=A*theta  
-%   ÏÖÔÚÒÑÖªyºÍA£¬Çótheta  
+%   ä»¤ A = Phi*Psi, åˆ™y=A*theta  
+%   çŽ°åœ¨å·²çŸ¥yå’ŒAï¼Œæ±‚theta  
     [y_rows,y_columns] = size(y);  
     if y_rows<y_columns  
         y = y';%y should be a column vector  
     end  
-    [M,N] = size(A);%´«¸Ð¾ØÕóAÎªM*N¾ØÕó  
-    theta = zeros(N,1);%ÓÃÀ´´æ´¢»Ö¸´µÄtheta(ÁÐÏòÁ¿)  
-    At = zeros(M,t);%ÓÃÀ´µü´ú¹ý³ÌÖÐ´æ´¢A±»Ñ¡ÔñµÄÁÐ  
-    Pos_theta = zeros(1,t);%ÓÃÀ´µü´ú¹ý³ÌÖÐ´æ´¢A±»Ñ¡ÔñµÄÁÐÐòºÅ  
-    r_n = y;%³õÊ¼»¯²Ð²î(residual)Îªy  
-    for ii=1:t%µü´út´Î£¬tÎªÊäÈë²ÎÊý  
-        product = A'*r_n;%´«¸Ð¾ØÕóA¸÷ÁÐÓë²Ð²îµÄÄÚ»ý  
-        [val,pos] = max(abs(product));%ÕÒµ½×î´óÄÚ»ý¾ø¶ÔÖµ£¬¼´Óë²Ð²î×îÏà¹ØµÄÁÐ  
-        At(:,ii) = A(:,pos);%´æ´¢ÕâÒ»ÁÐ  
-        Pos_theta(ii) = pos;%´æ´¢ÕâÒ»ÁÐµÄÐòºÅ  
-        A(:,pos) = zeros(M,1);%ÇåÁãAµÄÕâÒ»ÁÐ£¬ÆäÊµ´ËÐÐ¿ÉÒÔ²»Òª£¬ÒòÎªËüÓë²Ð²îÕý½»  
-        %y=At(:,1:ii)*theta£¬ÒÔÏÂÇóthetaµÄ×îÐ¡¶þ³Ë½â(Least Square)  
-        theta_ls = (At(:,1:ii)'*At(:,1:ii))^(-1)*At(:,1:ii)'*y;%×îÐ¡¶þ³Ë½â  
-        %At(:,1:ii)*theta_lsÊÇyÔÚAt(:,1:ii)ÁÐ¿Õ¼äÉÏµÄÕý½»Í¶Ó°  
-        r_n = y - At(:,1:ii)*theta_ls;%¸üÐÂ²Ð²î          
+    [M,N] = size(A);%ä¼ æ„ŸçŸ©é˜µAä¸ºM*NçŸ©é˜µ  
+    theta = zeros(N,1);%ç”¨æ¥å­˜å‚¨æ¢å¤çš„theta(åˆ—å‘é‡)  
+    At = zeros(M,t);%ç”¨æ¥è¿­ä»£è¿‡ç¨‹ä¸­å­˜å‚¨Aè¢«é€‰æ‹©çš„åˆ—  
+    Pos_theta = zeros(1,t);%ç”¨æ¥è¿­ä»£è¿‡ç¨‹ä¸­å­˜å‚¨Aè¢«é€‰æ‹©çš„åˆ—åºå·  
+    r_n = y;%åˆå§‹åŒ–æ®‹å·®(residual)ä¸ºy  
+    for ii=1:t%è¿­ä»£tæ¬¡ï¼Œtä¸ºè¾“å…¥å‚æ•°  
+        product = A'*r_n;%ä¼ æ„ŸçŸ©é˜µAå„åˆ—ä¸Žæ®‹å·®çš„å†…ç§¯  
+        [val,pos] = max(abs(product));%æ‰¾åˆ°æœ€å¤§å†…ç§¯ç»å¯¹å€¼ï¼Œå³ä¸Žæ®‹å·®æœ€ç›¸å…³çš„åˆ—  
+        At(:,ii) = A(:,pos);%å­˜å‚¨è¿™ä¸€åˆ—  
+        Pos_theta(ii) = pos;%å­˜å‚¨è¿™ä¸€åˆ—çš„åºå·  
+        A(:,pos) = zeros(M,1);%æ¸…é›¶Açš„è¿™ä¸€åˆ—ï¼Œå…¶å®žæ­¤è¡Œå¯ä»¥ä¸è¦ï¼Œå› ä¸ºå®ƒä¸Žæ®‹å·®æ­£äº¤  
+        %y=At(:,1:ii)*thetaï¼Œä»¥ä¸‹æ±‚thetaçš„æœ€å°äºŒä¹˜è§£(Least Square)  
+        theta_ls = (At(:,1:ii)'*At(:,1:ii))^(-1)*At(:,1:ii)'*y;%æœ€å°äºŒä¹˜è§£  
+        %At(:,1:ii)*theta_lsæ˜¯yåœ¨At(:,1:ii)åˆ—ç©ºé—´ä¸Šçš„æ­£äº¤æŠ•å½±  
+        r_n = y - At(:,1:ii)*theta_ls;%æ›´æ–°æ®‹å·®          
     end  
-    theta(Pos_theta)=theta_ls;%»Ö¸´³öµÄtheta  
+    theta(Pos_theta)=theta_ls;%æ¢å¤å‡ºçš„theta  
